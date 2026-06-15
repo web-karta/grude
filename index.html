@@ -271,18 +271,21 @@ font-family: "PT Serif", serif;
 font-size: 20px;
 font-weight: 700;
 text-align: center;
+z-index: 9999;
 margin-bottom: 12px;
 }
 
 @media (max-width: 768px) {
 
 .map-info-panel {
-top: 0;
-right: 44px;
-
-width: 300px;
-width: auto !important;
+position: fixed !important;
+top: 10px !important;
 left: 10px !important;
+right: 54px !important;
+
+width: auto !important;
+max-width: none !important;
+min-width: 0 !important;
 
 max-height: 350px;
 
@@ -605,13 +608,18 @@ background: rgb(220,220,220);
 @media (max-width: 768px) {
 
 .leaflet-control-layers {
-top: 0 !important;
-right: 44px !important;
+position: fixed !important;
+top: 10px !important;
 left: 10px !important;
+right: 54px !important;
+
 width: auto !important;
+max-width: none !important;
+min-width: 0 !important;
 max-height: 350px;
 font-size: 12px;
 border-radius: 16px !important;
+z-index: 9999;
 }
 
 .layers-custom-title {
@@ -1437,7 +1445,8 @@ var panel = L.DomUtil.create('div', 'map-info-panel', container);
 panel.innerHTML = `
 <div class="map-info-title">Web-karta Općine Grude</div>
 <div>Web-karta je izrađena u okviru diplomskog rada "Primjena GIS tehnologija u analizi prostornih podataka i razvoju interaktivne web-karte Općine Grude" na Geodetskom fakultetu Sveučilišta u Zagrebu pod mentorstvom izv. prof. dr. sc. Ivke Kljajić.<br>
-   Prikazuje prostorni raspored najvažnijih prirodnih, društvenih, gospodarskih, kulturnih i infrastrukturnih sadržaja na području Općine Grude. Omogućuje upoznavanje s Općinom Grude i njezinim obilježjima, pregled, pretraživanje i analizu prostornih podataka te pristup informacijama o pojedinim objektima.<br><p>
+   Prikazuje prostorni raspored najvažnijih prirodnih, društvenih, gospodarskih, kulturnih i infrastrukturnih sadržaja na području Općine Grude. Omogućuje upoznavanje s Općinom Grude i njezinim obilježjima, pregled, pretraživanje i analizu prostornih podataka te pristup informacijama o pojedinim objektima.<br>
+   Karta omogućuje i pregled prostora u 3D okruženju te korištenje prikaza simulacije javnog prijevoza (BETA). <br><p>
    <b>Kartografska projekcija:</b><br>
    Web-Mercatorova projekcija (EPSG: 3857)<br><p>
 
