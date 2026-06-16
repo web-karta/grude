@@ -7,7 +7,7 @@
       <meta name="google-site-verification" 
       content="google23a9c3762fc1cd27">
       <meta name="keywords" content="Web-karta Općine Grude">
-      <meta name="description" content="Interaktivna web-karta Općine Grude izrađena u sklopu diplomskog rada 'Primjena GIS tehnologija u analizi prostornih podataka i razvoju interaktivne web-karte Općine Grude', autor: Josip Alpeza">
+      <meta name="description" content="Interaktivna web-karta Općine Grude. Karta Grude. Web-karta Grude">
 
       <link rel="icon" type="image/svg+xml" href="Oznake/Grude.svg">
       <link rel="preload" as="image" href="Oznake/Pretraga.svg">
@@ -1275,7 +1275,7 @@ var obuhvat = [[43.22, 17.17], [43.49, 17.58]];
 var cartoPodloga = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { 
 maxZoom: 19,
 minZoom: 10 
-})
+}).addTo(map);
 
 var esriPodloga = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
 maxZoom: 19,
