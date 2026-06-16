@@ -203,7 +203,7 @@ overflow-y: auto;
 .panel-close,
 .routing-close {
 position: absolute;
-top: -10px;
+top: -2px;
 right: 1px;
 
 width: 24px;
@@ -1275,7 +1275,7 @@ var obuhvat = [[43.22, 17.17], [43.49, 17.58]];
 var cartoPodloga = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { 
 maxZoom: 19,
 minZoom: 10 
-}).addTo(map);
+})
 
 var esriPodloga = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
 maxZoom: 19,
@@ -3668,7 +3668,7 @@ if (e.layer === slojAdresniRegistar) {
 adresniIkoneUkljucene = true;
 
 if (map.getZoom() < 17) {
-alert("Adresni registar prikazuje se tek od zooma 17 radi bržeg rada karte. Povećajte prikaz i adrese će se automatski prikazati.");
+alert("Adrese se prikazuju tek pri krupnijem mjerilu prikaza.\nPovećajte prikaz na željeno područje i adrese će se automatski prikazati.");
 }
 
 osvjeziPrikazAdresnihIkona();
