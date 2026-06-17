@@ -81,16 +81,13 @@ background: #FFF2CC !important;
 
 
 
-        /* ⬇️ STATION LABELS ISPOD VOZILA */
 .leaflet-tooltip-pane {
   z-index: 500 !important;
 }
 
-/* popup ostaje iznad svega */
 .leaflet-popup-pane {
   z-index: 700 !important;
 }
-/* ===== INFO OKVIR – DESNO (SVI UREĐAJI) ===== */
 #betaInfoPanel {
 position: absolute;
 top: 10px;
@@ -113,7 +110,6 @@ min-height: 200px;
 z-index: 1200;
 overflow-y: auto;
 }
-/* eksplicitno za touch uređaje */
 @media (max-width: 768px) {
 #betaInfoPanel {
 top: 0;
@@ -145,7 +141,6 @@ margin-bottom: 12px;
 }
 
 
-/* 🔤 SVI LEAFLET POPUPOVI – PT Sans */
 .leaflet-popup-content,
 .leaflet-popup-content * {
   font-family: "PT Sans", Arial, sans-serif !important;
@@ -476,12 +471,10 @@ imperial: false,
 metric: true
 }).addTo(map);
 
-// ===== PANE ZA VOZILA (UVIJEK IZNAD LABELA) =====
 map.createPane('vehiclePane');
 map.getPane('vehiclePane').style.zIndex = 600;
 
 
-// 🔑 forsiraj početni zoom po uređaju
 function findNearestStation(latlng) {
   let best = null;
   let bestDist = Infinity;
@@ -631,7 +624,6 @@ map.on('click', function () {
 
 map.on('locationfound', function (e) {
 
-  // ❗ ako je korisnik previše udaljen (karte nema smisla)
   if (map.getZoom() < 12) {
     L.popup()
       .setLatLng(e.latlng)
@@ -839,12 +831,10 @@ setTimeout(promijenimjeriloOznake, 0);
         //map.addLayer(layer_TramvajskamreaopineGrude_1);
  function pop_Tramvajskestanice_2(feature, layer) {
 
-  // nemoj bindati stari qgis popup
   // layer.bindPopup(content, { maxHeight: 400 });
 
   layer.on('click', function (e) {
 
-    // ⭐ BITNO: spriječi da klik ode na mapu (jer map.on('click') briše popup!)
     L.DomEvent.stopPropagation(e);
 
     const API = window.BETA_API;
@@ -856,15 +846,11 @@ setTimeout(promijenimjeriloOznake, 0);
     const st = API.stationById.get(id);
     if (!st) return;
 
-    // ukloni prethodnu selekciju (marker + timer iz beta_live)
     API.clearStationSelection();
 
-    // sinkroniziraj dropdown (da pokaže odabranu)
     const stationSel = document.getElementById('betaStationSel');
     if (stationSel) stationSel.value = id;
 
-    // marker za popup (isti kao dropdown)
-// nevidljivi marker samo kao nosač popupa
 const m = L.circleMarker(st.latlng, {
   radius: 0,
   opacity: 0,
@@ -882,7 +868,6 @@ const m = L.circleMarker(st.latlng, {
           ? arr.map(a => `${a.linija} ${a.smjer} (${a.label})`).join('<br>')
           : 'Nema skorih dolazaka.');
 
-      // ⭐ BITNO: prvo bindPopup (da popup uopće postoji), onda update
       if (!m.getPopup()) {
 m.bindPopup(html, {
   className: 'beta-station-popup',
@@ -897,7 +882,6 @@ m.bindPopup(html, {
     updatePopup();
     popupTimer = setInterval(updatePopup, 2000);
 
-    // cleanup kad se zatvori popup
     m.on('popupclose', () => {
       if (popupTimer) clearInterval(popupTimer);
     });
@@ -980,10 +964,8 @@ function updateStationLabelVisibility() {
   });
 }
 
-// inicijalno
 updateStationLabelVisibility();
 
-// na zoom
 map.on('zoomend', updateStationLabelVisibility);
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -991,7 +973,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (!panel) return;
 
-  // 🚫 spriječi Leaflet da presretne touch
   L.DomEvent.disableClickPropagation(panel);
   L.DomEvent.disableScrollPropagation(panel);
 
