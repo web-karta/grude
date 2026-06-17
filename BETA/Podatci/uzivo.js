@@ -714,7 +714,7 @@
   white-space: nowrap;
   }
   background-image: radial-gradient(circle, rgba(215,247,180,0.98) 0 1.35px, transparent 1.55px);
-  background-size: 6px 6px;        /* gustoća točkica (smanji na 5px za gušće) */
+  background-size: 6px 6px;
   background-position: 0 0;
   -webkit-background-clip: text;
   background-clip: text;
