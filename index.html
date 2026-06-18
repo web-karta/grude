@@ -30,6 +30,7 @@
 </script>
 
       <link rel="icon" type="image/svg+xml" href="Oznake/Grude.svg">
+      <link rel="preload" as="image" href="Oznake/preloader.png" fetchpriority="high">
       <link rel="preload" as="image" href="Oznake/Pretraga.svg">
       <link rel="preload" as="image" href="Oznake/slojevi.png">
       <link rel="preload" as="image" href="Oznake/lokacija.svg">
@@ -62,8 +63,10 @@ background: white;
 display: flex;
 justify-content: center;
 align-items: center;
-z-index: 9999;
+z-index: 99999;
 text-align: center;
+pointer-events: all;
+touch-action: none;
 }
 
 #preloader img {
@@ -974,9 +977,9 @@ pointer-events: none !important;
   </head>
   <body>
 
-      <div id="preloader">
-      <img src="Oznake/preloader.png">
-      </div>
+<div id="preloader">
+<img src="Oznake/preloader.png" fetchpriority="high" decoding="sync">
+</div>
 
       <div id="map"></div>
       <div id="viewer" style="
@@ -1285,6 +1288,19 @@ var obuhvat = [[43.18, 17.10], [43.56, 17.65]];
       }).setView([43.3530, 17.4050], 
       
       window.innerWidth <= 768 ? 11 : 12);
+
+      var kartaZakljucana = true;
+
+map.dragging.disable();
+map.touchZoom.disable();
+map.doubleClickZoom.disable();
+map.scrollWheelZoom.disable();
+map.boxZoom.disable();
+map.keyboard.disable();
+
+if (map.tap) {
+map.tap.disable();
+}
 
           var attribution = L.control.attribution({
     prefix: false,
@@ -3979,7 +3995,6 @@ L.DomEvent.disableScrollPropagation(panel);
     });
 
 window.addEventListener('load', function () {
-
 const preloader = document.getElementById('preloader');
 
 if (!preloader) return;
@@ -3987,10 +4002,23 @@ if (!preloader) return;
 preloader.style.transition = 'opacity 0.3s ease';
 preloader.style.opacity = '0';
 
-setTimeout(() => {
+setTimeout(function() {
 preloader.style.display = 'none';
-}, 300);
 
+kartaZakljucana = false;
+
+map.dragging.enable();
+map.touchZoom.enable();
+map.doubleClickZoom.enable();
+map.scrollWheelZoom.enable();
+map.boxZoom.enable();
+map.keyboard.enable();
+
+if (map.tap) {
+map.tap.enable();
+}
+
+}, 300);
 });
     </script>
 
