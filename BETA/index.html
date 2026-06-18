@@ -6,7 +6,8 @@
         <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">        
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">   
+<link rel="preload" as="image" href="Oznake/BETA.png" fetchpriority="high">     
           <link rel="preload" as="image" href="Oznake/bus.svg">
 <link rel="preload" as="image" href="Oznake/leaflet.png">
 <link rel="preload" as="image" href="Oznake/Grude.svg">
@@ -30,7 +31,7 @@
             margin: 0;
         }
 
-        #preloader {
+#preloader {
 position: fixed;
 top: 0;
 left: 0;
@@ -41,6 +42,9 @@ display: flex;
 justify-content: center;
 align-items: center;
 z-index: 99999;
+text-align: center;
+pointer-events: all;
+touch-action: none;
 }
 
 #preloader img {
@@ -416,8 +420,11 @@ display: none !important;
     </head>
     <body>
 
-      <div id="preloader">
-  <img src="Oznake/BETA.png" alt="BETA">
+<div id="preloader">
+  <img src="Oznake/BETA.png"
+       alt="BETA"
+       fetchpriority="high"
+       decoding="sync">
 </div>
         <div id="map">
         </div>
@@ -452,6 +459,19 @@ var map = L.map('map', {
   
   IS_MOBILE ? 11 : 12
 );
+
+var kartaZakljucana = true;
+
+map.dragging.disable();
+map.touchZoom.disable();
+map.doubleClickZoom.disable();
+map.scrollWheelZoom.disable();
+map.boxZoom.disable();
+map.keyboard.disable();
+
+if (map.tap) {
+map.tap.disable();
+}
 
 
           var attribution = L.control.attribution({
@@ -1122,16 +1142,30 @@ Prikaz položaja vozila, vremena dolaska i prometovanja linija zasniva se na una
 
 <script>
 window.addEventListener('load', function () {
-  const preloader = document.getElementById('preloader');
+const preloader = document.getElementById('preloader');
 
-  if (!preloader) return;
+if (!preloader) return;
 
-  preloader.style.transition = 'opacity 0.3s ease';
-  preloader.style.opacity = '0';
+preloader.style.transition = 'opacity 0.3s ease';
+preloader.style.opacity = '0';
 
-  setTimeout(() => {
-    preloader.style.display = 'none';
-  }, 300);
+setTimeout(function() {
+preloader.style.display = 'none';
+
+kartaZakljucana = false;
+
+map.dragging.enable();
+map.touchZoom.enable();
+map.doubleClickZoom.enable();
+map.scrollWheelZoom.enable();
+map.boxZoom.enable();
+map.keyboard.enable();
+
+if (map.tap) {
+map.tap.enable();
+}
+
+}, 300);
 });
 </script>
     </body>
