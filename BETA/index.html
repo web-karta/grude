@@ -444,7 +444,7 @@ var map = L.map('map', {
   maxBounds: obuhvat,
   maxBoundsViscosity: 1.0,
   zoomControl: false,
-  maxZoom: 28,
+  maxZoom: 19,
   minZoom: 10,
   attributionControl: false
 }).setView(
@@ -465,13 +465,74 @@ var map = L.map('map', {
     'onclick="window.open(\'https://leafletjs.com\', \'_blank\')">'
     );
 
-    L.control.scale({
+L.control.scale({
 position: window.innerWidth <= 768 ? 'bottomright' : 'bottomleft',
 imperial: false,
 metric: true
 }).addTo(map);
 
+var scaleElement = document.querySelector('.leaflet-control-scale');
+
+if (scaleElement) {
+
+let smjerMjerila = 1;
+let zadnjiZoom = map.getZoom();
+
+L.DomEvent.disableClickPropagation(scaleElement);
+
+map.on('zoomend', function() {
+
+const noviZoom = map.getZoom();
+
+if (noviZoom > zadnjiZoom) {
+smjerMjerila = 1;
+}
+else if (noviZoom < zadnjiZoom) {
+smjerMjerila = -1;
+}
+
+if (noviZoom >= map.getMaxZoom()) {
+smjerMjerila = -1;
+}
+
+if (noviZoom <= map.getMinZoom()) {
+smjerMjerila = 1;
+}
+
+zadnjiZoom = noviZoom;
+
+});
+
+function promijeniZoomMjerilom(e) {
+
+if (e) {
+L.DomEvent.stopPropagation(e);
+L.DomEvent.preventDefault(e);
+}
+
+const zoom = map.getZoom();
+
+map.setZoom(zoom + smjerMjerila);
+
+}
+
+scaleElement.addEventListener('dblclick', promijeniZoomMjerilom);
+
+scaleElement.addEventListener('click', function(e) {
+
+if (window.innerWidth <= 768) {
+promijeniZoomMjerilom(e);
+}
+
+});
+
+}
+
 map.createPane('vehiclePane');
+
+map.createPane('vehiclePane');
+
+
 map.getPane('vehiclePane').style.zIndex = 600;
 
 
