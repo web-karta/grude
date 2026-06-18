@@ -1305,7 +1305,7 @@ minZoom: 10
 }).addTo(map);
 
 var esriPodloga = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-maxZoom: 19,
+maxZoom: 18,
 minZoom: 10
 });
 
@@ -1784,7 +1784,7 @@ setTimeout(function() {
       return container;
       };
 
-      pretrazi.addTo(map);
+pretrazi.addTo(map);
 
 var scaleControl = L.control.scale({
 position: window.innerWidth <= 768 ? 'bottomright' : 'bottomleft',
@@ -1792,8 +1792,63 @@ imperial: false,
 metric: true
 }).addTo(map);
 
-document.querySelector('.leaflet-control-scale')
-?.classList.add('hideable-control');
+var scaleElement = document.querySelector('.leaflet-control-scale');
+
+if (scaleElement) {
+
+scaleElement.classList.add('hideable-control');
+
+let smjerMjerila = 1;
+let zadnjiZoom = map.getZoom();
+
+L.DomEvent.disableClickPropagation(scaleElement);
+
+map.on('zoomend', function() {
+
+const noviZoom = map.getZoom();
+
+if (noviZoom > zadnjiZoom) {
+smjerMjerila = 1;
+}
+else if (noviZoom < zadnjiZoom) {
+smjerMjerila = -1;
+}
+
+if (noviZoom >= map.getMaxZoom()) {
+smjerMjerila = -1;
+}
+
+if (noviZoom <= map.getMinZoom()) {
+smjerMjerila = 1;
+}
+
+zadnjiZoom = noviZoom;
+
+});
+
+function promijeniZoomMjerilom(e) {
+
+if (e) {
+L.DomEvent.stopPropagation(e);
+L.DomEvent.preventDefault(e);
+}
+
+map.setZoom(map.getZoom() + smjerMjerila);
+
+}
+
+scaleElement.addEventListener('dblclick', promijeniZoomMjerilom);
+
+/* mobitel */
+scaleElement.addEventListener('click', function(e) {
+
+if (window.innerWidth <= 768) {
+promijeniZoomMjerilom(e);
+}
+
+});
+
+}
 
 var prikaziPanelLokacije = false;
 
@@ -3732,34 +3787,39 @@ slojTrgovine,
 slojPoduzeca
 ];
 
-var mobilniObjektiCache = [];
+var objektiRenderCache = [];
 
 slojeviZaMobilnoUbrzanje.forEach(function(grupa) {
 grupa.eachLayer(function(layer) {
-mobilniObjektiCache.push({
+if (!layer.getLatLng) return;
+
+objektiRenderCache.push({
 grupa: grupa,
 layer: layer
 });
 });
 });
 
-function osvjeziMobilneObjekte() {
+function osvjeziObjekteUVidljivomPodrucju() {
 
+var bounds = map.getBounds().pad(0.25);
 
-var bounds = map.getBounds().pad(0.35);
+objektiRenderCache.forEach(function(obj) {
 
-mobilniObjektiCache.forEach(function(obj) {
-if (!obj.layer.getLatLng) return;
-
+var grupaUkljucena = map.hasLayer(obj.grupa);
 var vidljiv = bounds.contains(obj.layer.getLatLng());
 
-if (vidljiv && !obj.grupa.hasLayer(obj.layer)) {
+if (!grupaUkljucena || !vidljiv) {
+if (obj.grupa.hasLayer(obj.layer)) {
+obj.grupa.removeLayer(obj.layer);
+}
+return;
+}
+
+if (!obj.grupa.hasLayer(obj.layer)) {
 obj.grupa.addLayer(obj.layer);
 }
 
-if (!vidljiv && obj.grupa.hasLayer(obj.layer)) {
-obj.grupa.removeLayer(obj.layer);
-}
 });
 }
 
@@ -3778,6 +3838,7 @@ alert("Adrese se prikazuju tek pri krupnijem mjerilu prikaza.\nPovećajte prikaz
 
 osvjeziPrikazAdresnihIkona();
 }
+osvjeziObjekteUVidljivomPodrucju();
 });
 
 map.on('overlayremove', function(e) {
@@ -3785,19 +3846,22 @@ if (e.layer === slojAdresniRegistar) {
 adresniIkoneUkljucene = false;
 osvjeziPrikazAdresnihIkona();
 }
+osvjeziObjekteUVidljivomPodrucju();
+
 });
 
 map.on('zoomend', function() {
 osvjeziPrikazAdresnihIkona();
-osvjeziMobilneObjekte();
+osvjeziObjekteUVidljivomPodrucju();
 });
 
 map.on('moveend', function() {
 osvjeziPrikazAdresnihIkona();
-osvjeziMobilneObjekte();
+osvjeziObjekteUVidljivomPodrucju();
 });
 
-setTimeout(osvjeziMobilneObjekte, 300);
+setTimeout(osvjeziObjekteUVidljivomPodrucju, 0);
+setTimeout(osvjeziObjekteUVidljivomPodrucju, 300);
 
 setTimeout(function() {
 var panel = document.querySelector('.leaflet-control-layers');
