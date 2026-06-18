@@ -3704,6 +3704,65 @@ var tematskiSlojevi = {
 
 };
 
+
+var slojeviZaMobilnoUbrzanje = [
+slojCrkve,
+slojGroblja,
+slojSkole,
+slojVrtici,
+slojSRUstanove,
+slojVetUstanove,
+slojLjekarne,
+slojStomatoloske,
+slojZdravstvene,
+slojVatrogasne,
+slojPosta,
+slojPolicijaCarina,
+slojGranicniPrijelazi,
+slojJavnaUprava,
+slojKulturneUstanove,
+slojPrirodneZnamenitosti,
+slojKulturnoPovijesneZnamenitosti,
+slojRestorani,
+slojKafici,
+slojSmjestaji,
+slojBenzinskePostaje,
+slojBanke,
+slojTrgovine,
+slojPoduzeca
+];
+
+var mobilniObjektiCache = [];
+
+slojeviZaMobilnoUbrzanje.forEach(function(grupa) {
+grupa.eachLayer(function(layer) {
+mobilniObjektiCache.push({
+grupa: grupa,
+layer: layer
+});
+});
+});
+
+function osvjeziMobilneObjekte() {
+
+
+var bounds = map.getBounds().pad(0.35);
+
+mobilniObjektiCache.forEach(function(obj) {
+if (!obj.layer.getLatLng) return;
+
+var vidljiv = bounds.contains(obj.layer.getLatLng());
+
+if (vidljiv && !obj.grupa.hasLayer(obj.layer)) {
+obj.grupa.addLayer(obj.layer);
+}
+
+if (!vidljiv && obj.grupa.hasLayer(obj.layer)) {
+obj.grupa.removeLayer(obj.layer);
+}
+});
+}
+
 var praviLayersPanel = L.control.layers(podloge, tematskiSlojevi, {
 collapsed: true,
 position: 'topright'
@@ -3730,11 +3789,15 @@ osvjeziPrikazAdresnihIkona();
 
 map.on('zoomend', function() {
 osvjeziPrikazAdresnihIkona();
+osvjeziMobilneObjekte();
 });
 
 map.on('moveend', function() {
 osvjeziPrikazAdresnihIkona();
+osvjeziMobilneObjekte();
 });
+
+setTimeout(osvjeziMobilneObjekte, 300);
 
 setTimeout(function() {
 var panel = document.querySelector('.leaflet-control-layers');
