@@ -3,10 +3,8 @@
   <head>
       <meta charset="utf-8">
       <title>Web-karta Općine Grude</title>
-
-      <meta name="google-site-verification" 
-      content="google23a9c3762fc1cd27">
-<meta name="keywords" content="karta Grude, web-karta Grude, web-karta Općine Grude, Općina Grude, interaktivna karta Grude, GIS Grude">
+      <meta name="google-site-verification" content="google23a9c3762fc1cd27">
+      <meta name="keywords" content="karta Grude, web-karta Grude, web-karta Općine Grude, Općina Grude, interaktivna karta Grude, GIS Grude">
       <meta name="description" content="Interaktivna web-karta Općine Grude. Karta Grude. Web-karta Grude">
       <meta property="og:title" content="Web-karta Općine Grude">
 <meta property="og:description" content="Interaktivna web-karta Općine Grude">
@@ -966,6 +964,11 @@ right: 0 !important;
 }
 
 }
+
+.hide-in-3d {
+visibility: hidden !important;
+pointer-events: none !important;
+}
     </style>
 
   </head>
@@ -990,8 +993,8 @@ right: 0 !important;
 
       
 
-          <div id="koordinatni-okvir">
-    <select id="izbor-projekcije">
+<div id="koordinatni-okvir" class="hideable-control">    
+      <select id="izbor-projekcije">
     <option value="wgs84">WGS84</option>
         <option value="bh_etrs89">BH_ETRS89/TM</option>    
 
@@ -1285,6 +1288,8 @@ var obuhvat = [[43.22, 17.17], [43.49, 17.58]];
     prefix: false,
     position: 'bottomleft'
     }).addTo(map);
+    document.querySelector('.leaflet-control-attribution')
+?.classList.add('hideable-control');
     attribution.addAttribution(
     '<img src="Oznake/leaflet.png" ' +
     'style="height:22px; cursor:pointer;" ' +
@@ -1451,6 +1456,7 @@ var infoKarte = L.control({ position: 'topright' });
 
 infoKarte.onAdd = function () {
 var container = L.DomUtil.create('div');
+container.classList.add('hideable-control');
 
 var gumb = L.DomUtil.create('div', 'toggle-btn', container);
 gumb.innerHTML = `
@@ -1516,6 +1522,7 @@ var layersIkona = L.control({ position: 'topright' });
 
 layersIkona.onAdd = function () {
 var container = L.DomUtil.create('div');
+container.classList.add('hideable-control');
 container.style.marginTop = '6px';
 
 var gumb = L.DomUtil.create('div', 'toggle-btn layers-toggle-btn', container);
@@ -1582,6 +1589,8 @@ div.innerHTML = "2D";
 div.title = "Prikaži u ravnini";
 viewer.style.display = "block";
 frame.src = url2D;
+document.querySelectorAll('.hideable-control')
+.forEach(el => el.classList.add('hide-in-3d'));
 div.classList.add('active');
 } else {
 prikaz = "3D";
@@ -1589,6 +1598,8 @@ div.innerHTML = "3D";
 div.title = "Prikaži u prostoru";
 viewer.style.display = "none";
 frame.src = "";
+document.querySelectorAll('.hideable-control')
+.forEach(el => el.classList.remove('hide-in-3d'));
 div.classList.remove('active');
 }
 
@@ -1603,6 +1614,7 @@ L.DomEvent.disableClickPropagation(div);
 betaGumb.onAdd = function () {
 
 var container = L.DomUtil.create('div');
+container.classList.add('hideable-control');
 container.style.marginTop = '6px';
 
 var gumb = L.DomUtil.create('div', 'toggle-btn', container);
@@ -1644,6 +1656,7 @@ betaGumb.addTo(map);
 
       izbornik.onAdd = function () {
       var container = L.DomUtil.create('div');
+      container.classList.add('hideable-control');
 
       var gumb = L.DomUtil.create('div', 'toggle-btn', container);
       gumb.innerHTML = "☰";
@@ -1714,6 +1727,7 @@ panel.style.display = "none";
 
       pretrazi.onAdd = function () {
       var container = L.DomUtil.create('div');
+      container.classList.add('hideable-control');
       container.style.marginTop = '6px';
 
       var gumb = L.DomUtil.create('div', 'toggle-btn', container);
@@ -1772,11 +1786,14 @@ setTimeout(function() {
 
       pretrazi.addTo(map);
 
-L.control.scale({
+var scaleControl = L.control.scale({
 position: window.innerWidth <= 768 ? 'bottomright' : 'bottomleft',
 imperial: false,
 metric: true
 }).addTo(map);
+
+document.querySelector('.leaflet-control-scale')
+?.classList.add('hideable-control');
 
 var prikaziPanelLokacije = false;
 
@@ -1821,6 +1838,9 @@ timeout: 10000,
 watch: true
 }
 }).addTo(map);
+
+document.querySelector('.leaflet-control-locate')
+?.classList.add('hideable-control');
 
 /*var locateButton = document.querySelector('.leaflet-control-locate a');
 
@@ -1916,6 +1936,10 @@ return container;
 };
 
 routingGumb.addTo(map);
+
+document.querySelector('.routing-toggle-btn')
+?.closest('.leaflet-control')
+?.classList.add('hideable-control');
 
 function postaviRoutingStatus(tekst) {
 var el = document.getElementById("routingStatus");
