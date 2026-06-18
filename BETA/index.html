@@ -438,11 +438,11 @@ display: none !important;
         <script>
 const IS_MOBILE = window.matchMedia('(max-width: 768px)').matches;
 
-var obuhvat = [[43.22, 17.17], [43.49, 17.58]];
+var obuhvat = [[43.18, 17.10], [43.56, 17.65]];
 
 var map = L.map('map', {
   maxBounds: obuhvat,
-  maxBoundsViscosity: 1.0,
+  maxBoundsViscosity: 0.75,
   zoomControl: false,
   maxZoom: 19,
   minZoom: 10,
