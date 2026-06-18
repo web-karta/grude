@@ -1274,12 +1274,12 @@ U Općini Grude nalaze se i brojni stećci koji svjedoče o životu na ovom podr
       <script src="Podatci/granica.js"></script>
     <script>
 
-var obuhvat = [[43.22, 17.17], [43.49, 17.58]];
+var obuhvat = [[43.18, 17.10], [43.56, 17.65]];
 //ZASAD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! PROMIJENI!!!!!!!!!!!!!!!!!!!!!! OVO JE SAMO TEST JER SAM U ZAGREBU!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       var graniceObuhvata = L.latLngBounds(obuhvat);
       var map = L.map('map', {
       maxBounds: obuhvat,
-      maxBoundsViscosity: 1.0,
+      maxBoundsViscosity: 0.75,
       zoomControl: false,
           attributionControl: false
       }).setView([43.3530, 17.4050], 
@@ -2309,7 +2309,22 @@ if (fromLocation) {
 fromLocation.onclick = function(e) {
 e.stopPropagation();
 
+function lokacijaIzvanRoutingObuhvata() {
+alert("Nalazite se izvan područja Općine Grude.\nOdaberite polazište unutar ili u blizini područja Općine Grude.");
+routingFromJeMojaLokacija = false;
+routingPratiKorisnika = false;
+window.lastUserLocation = null;
+
+postaviRoutingStatus("");
+}
+
 if (window.lastUserLocation) {
+
+if (!graniceObuhvata.contains(window.lastUserLocation)) {
+lokacijaIzvanRoutingObuhvata();
+return;
+}
+
 routingFromJeMojaLokacija = true;
 routingPratiKorisnika = true;
 
@@ -2323,10 +2338,16 @@ map.panTo(window.lastUserLocation, { animate: true });
 
 return;
 }
+
 if (navigator.geolocation) {
 
 navigator.geolocation.getCurrentPosition(function(pos) {
 var latlng = L.latLng(pos.coords.latitude, pos.coords.longitude);
+
+if (!graniceObuhvata.contains(latlng)) {
+lokacijaIzvanRoutingObuhvata();
+return;
+}
 
 routingFromJeMojaLokacija = true;
 routingPratiKorisnika = true;
