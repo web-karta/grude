@@ -1339,7 +1339,9 @@ return mjeriloOznake.call(this, icon);
     return mjeriloOznake.call(this, icon);
   }
 
-  const size = map.getZoom() <= 14 ? 10 : 20;
+const size = window.innerWidth <= 768
+? (map.getZoom() <= 14 ? 8 : 16)
+: (map.getZoom() <= 14 ? 10 : 20);
 
   const newIcon = L.icon({
     iconUrl: icon.options.iconUrl,
@@ -3825,42 +3827,6 @@ slojTrgovine,
 slojPoduzeca
 ];
 
-var objektiRenderCache = [];
-
-slojeviZaMobilnoUbrzanje.forEach(function(grupa) {
-grupa.eachLayer(function(layer) {
-if (!layer.getLatLng) return;
-
-objektiRenderCache.push({
-grupa: grupa,
-layer: layer
-});
-});
-});
-
-function osvjeziObjekteUVidljivomPodrucju() {
-
-var bounds = map.getBounds().pad(0.25);
-
-objektiRenderCache.forEach(function(obj) {
-
-var grupaUkljucena = map.hasLayer(obj.grupa);
-var vidljiv = bounds.contains(obj.layer.getLatLng());
-
-if (!grupaUkljucena || !vidljiv) {
-if (obj.grupa.hasLayer(obj.layer)) {
-obj.grupa.removeLayer(obj.layer);
-}
-return;
-}
-
-if (!obj.grupa.hasLayer(obj.layer)) {
-obj.grupa.addLayer(obj.layer);
-}
-
-});
-}
-
 var praviLayersPanel = L.control.layers(podloge, tematskiSlojevi, {
 collapsed: true,
 position: 'topright'
@@ -3876,7 +3842,6 @@ alert("Adrese se prikazuju tek pri krupnijem mjerilu prikaza.\nPovećajte prikaz
 
 osvjeziPrikazAdresnihIkona();
 }
-osvjeziObjekteUVidljivomPodrucju();
 });
 
 map.on('overlayremove', function(e) {
@@ -3884,22 +3849,17 @@ if (e.layer === slojAdresniRegistar) {
 adresniIkoneUkljucene = false;
 osvjeziPrikazAdresnihIkona();
 }
-osvjeziObjekteUVidljivomPodrucju();
 
 });
 
 map.on('zoomend', function() {
 osvjeziPrikazAdresnihIkona();
-osvjeziObjekteUVidljivomPodrucju();
 });
 
 map.on('moveend', function() {
 osvjeziPrikazAdresnihIkona();
-osvjeziObjekteUVidljivomPodrucju();
 });
 
-setTimeout(osvjeziObjekteUVidljivomPodrucju, 0);
-setTimeout(osvjeziObjekteUVidljivomPodrucju, 300);
 
 setTimeout(function() {
 var panel = document.querySelector('.leaflet-control-layers');
