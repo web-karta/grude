@@ -1277,7 +1277,7 @@ U Općini Grude nalaze se i brojni stećci koji svjedoče o životu na ovom podr
       <script src="Podatci/granica.js"></script>
     <script>
 
-var obuhvat = [[43.18, 17.10], [43.56, 17.65]];
+var obuhvat = [[40, 10], [50, 20]];
 //ZASAD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! PROMIJENI!!!!!!!!!!!!!!!!!!!!!! OVO JE SAMO TEST JER SAM U ZAGREBU!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       var graniceObuhvata = L.latLngBounds(obuhvat);
       var map = L.map('map', {
@@ -2567,7 +2567,7 @@ locateButton.style.setProperty('background', '#FFF2CC', 'important');
 
 var userLatLng = e.latlng;
 
-if (!graniceObuhvata.contains(userLatLng)) {
+/*if (!graniceObuhvata.contains(userLatLng)) {
 
 alert("Nalazite se izvan područja Općine Grude.");
 
@@ -2591,7 +2591,7 @@ locationPanel.style.display = 'none';
 }
 
 return;
-}
+}*/
 
 if (prikaziPanelLokacije) {
 
