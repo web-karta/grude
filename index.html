@@ -2505,51 +2505,44 @@ L.DomEvent.disableClickPropagation(results);
 }
 
 var locateButton = document.querySelector('.leaflet-control-locate a');
+var lokacijaAktivna = false;
 
 if (locateButton) {
 
-locateButton.addEventListener('click', function() {
-
-prikaziGeolokacijaObavijest();
-
-zatvoriOtvoreno('lociranje');
-resetirajAktivneGumbe();
+locateButton.addEventListener('click', function(e) {
 
 var locationPanel = document.querySelector('.location-panel');
 
-setTimeout(function() {
+if (lokacijaAktivna) {
 
-var active =
-document.querySelector('.leaflet-control-locate.active') ||
-document.querySelector('.leaflet-control-locate.following') ||
-document.querySelector('.leaflet-control-locate.requesting');
+L.DomEvent.stop(e);
+e.stopImmediatePropagation();
 
-if (active) {
-
-prikaziPanelLokacije = true;
-
-locateButton.style.setProperty('background', '#FFF2CC', 'important');
-
-if (window.lastUserLocation) {
-prikaziNajblizeObjekte(window.lastUserLocation);
-locationPanel.style.display = 'block';
-}
-
-} else {
-
+lokacijaAktivna = false;
 prikaziPanelLokacije = false;
 
-locateButton.style.setProperty('background', 'white', 'important');
+locateControl.stop();
 
 if (locationPanel) {
 locationPanel.style.display = 'none';
 }
 
+locateButton.style.setProperty('background', 'white', 'important');
+
+return false;
 }
 
-}, 200);
+prikaziGeolokacijaObavijest();
 
-});
+lokacijaAktivna = true;
+prikaziPanelLokacije = true;
+
+zatvoriOtvoreno('lociranje');
+resetirajAktivneGumbe();
+
+locateButton.style.setProperty('background', '#FFF2CC', 'important');
+
+}, true);
 
 }
 
@@ -2569,6 +2562,8 @@ animate: true,
 duration: 0.5
 });
 }
+
+
 
 var sada = Date.now();
 
@@ -2593,53 +2588,18 @@ pokreniRoutingAkoJeSpreman();
 
 }
 
-  var locateButton = document.querySelector('.leaflet-control-locate a');
-
-if (locateButton) {
-locateButton.style.setProperty('background', '#FFF2CC', 'important');
-}
-
-var userLatLng = e.latlng;
-
-if (!graniceObuhvata.contains(userLatLng)) {
-
-alert("Nalazite se izvan područja Općine Grude.");
-
-locateControl.stop();
-window.lastUserLocation = null;
-
-var locateButton = document.querySelector('.leaflet-control-locate a');
-
-if (locateButton) {
-locateButton.style.setProperty('background', 'white', 'important');
-}
-
-setTimeout(function() {
-resetirajAktivneGumbe();
-}, 100);
-
-var locationPanel = document.querySelector('.location-panel');
-
-if (locationPanel) {
-locationPanel.style.display = 'none';
-}
-
-return;
-}
-
 if (prikaziPanelLokacije) {
-
-prikaziNajblizeObjekte(userLatLng);
+prikaziNajblizeObjekte(e.latlng);
 
 var locationPanel = document.querySelector('.location-panel');
 
 if (locationPanel) {
 locationPanel.style.display = 'block';
 }
-
 }
 
 });
+
 
 
 
