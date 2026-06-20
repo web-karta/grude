@@ -1376,15 +1376,25 @@ const size = window.innerWidth <= 768
 };
 
 
-      function promijenimjeriloOznake() {
-      map.eachLayer(function(layer) {
-      if (layer instanceof L.Marker) {
-      layer.setIcon(layer.options.icon);
-      }
-      });
-      }
+function promijenimjeriloOznake() {
+map.eachLayer(function(layer) {
+if (layer instanceof L.Marker) {
+layer.setIcon(layer.options.icon);
+}
+});
+}
 
-map.on('zoomend', promijenimjeriloOznake);
+var timeoutMjeriloOznake = null;
+
+map.on('zoomend', function() {
+clearTimeout(timeoutMjeriloOznake);
+
+timeoutMjeriloOznake = setTimeout(function() {
+promijenimjeriloOznake();
+}, 250);
+});
+
+//map.on('zoomend', promijenimjeriloOznake);
 
 map.whenReady(function() {
   requestAnimationFrame(function() {
