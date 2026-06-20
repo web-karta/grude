@@ -31,12 +31,6 @@
 
       <link rel="icon" type="image/svg+xml" href="Oznake/Grude.svg">
       <link rel="preload" as="image" href="Oznake/preloader.png" fetchpriority="high">
-      <link rel="preload" as="image" href="Oznake/Pretraga.svg">
-      <link rel="preload" as="image" href="Oznake/slojevi.png">
-      <link rel="preload" as="image" href="Oznake/lokacija.svg">
-      <link rel="preload" as="image" href="Oznake/bus.svg">
-<link rel="preload" as="image" href="Oznake/leaflet.png">
-<link rel="preload" as="image" href="Oznake/Grude.svg">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
       <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css">
@@ -1327,12 +1321,18 @@ map.tap.disable();
 
 var cartoPodloga = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { 
 maxZoom: 19,
-minZoom: 10 
+minZoom: 10,
+updateWhenIdle: true,
+updateWhenZooming: false,
+keepBuffer: 1
 }).addTo(map);
 
 var esriPodloga = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
 maxZoom: 18,
-minZoom: 10
+minZoom: 10,
+updateWhenIdle: true,
+updateWhenZooming: false,
+keepBuffer: 1
 });
 
 var aktivnaPodloga = cartoPodloga;
