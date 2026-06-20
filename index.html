@@ -1529,8 +1529,6 @@ panel.innerHTML = `
 
       <b>Autor:</b><br>
    Josip Alpeza, univ. bacc. ing. geod. et geoinf.
-
-
   </div>
 `;
 
@@ -1955,16 +1953,6 @@ document.querySelector('.leaflet-control-locate')
 
 var locateButton = document.querySelector('.leaflet-control-locate a');
 
-if (locateButton) {
-
-locateButton.addEventListener('click', function() {
-
-prikaziGeolokacijaObavijest();
-prikaziPanelLokacije = true;
-
-});
-
-}
 
 var routingControl = null;
 var routingOdabirAktivan = null;
@@ -2521,6 +2509,8 @@ var locateButton = document.querySelector('.leaflet-control-locate a');
 if (locateButton) {
 
 locateButton.addEventListener('click', function() {
+
+prikaziGeolokacijaObavijest();
 
 zatvoriOtvoreno('lociranje');
 resetirajAktivneGumbe();
