@@ -58,8 +58,8 @@
   return SPECIAL_MD.has(md);
   }
 
-  const SATURDAY_DISABLED_VEHICLES = new Set(['21', '32', '42', '52', '62', '72']);
-  const SUNDAY_DISABLED_VEHICLES = new Set(['21', '32', '42', '52', '62', '72']);
+  const SATURDAY_DISABLED_VEHICLES = new Set(['21', '33', '42', '52', '62', '72']);
+  const SUNDAY_DISABLED_VEHICLES = new Set(['21', '32', '33', '42', '52', '62', '72']);
 
   function isSaturday(d = new Date()) {
   return d.getDay() === 6;
