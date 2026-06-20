@@ -496,7 +496,7 @@ outline: none !important;
     bottom: 18px !important;
     top: auto !important;
     transform: translateX(-50%) !important;
-    z-index: 1200 !important;
+    z-index: 9999 !important;
   }
 
   .nearest-results {
@@ -743,7 +743,7 @@ box-shadow: 0 1px 4px rgba(0,0,0,0.3);
 padding: 14px;
 box-sizing: border-box;
 font-family: "PT Sans", sans-serif;
-z-index: 1200;
+z-index: 3000 !important;
 }
 
 .routing-title {
@@ -1278,14 +1278,14 @@ U Općini Grude nalaze se i brojni stećci koji svjedoče o životu na ovom podr
     <script>
 
 var obuhvat = [[40, 10], [50, 20]];
-//ZASAD!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! PROMIJENI!!!!!!!!!!!!!!!!!!!!!! OVO JE SAMO TEST JER SAM U ZAGREBU!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// STVARNI VAR OBUHVAT:       var obuhvat = [[43.18, 17.10], [43.56, 17.65]];
       var graniceObuhvata = L.latLngBounds(obuhvat);
       var map = L.map('map', {
       maxBounds: obuhvat,
       maxBoundsViscosity: 0.75,
       zoomControl: false,
           attributionControl: false
-      }).setView([43.3530, 17.3700], 
+      }).setView([43.3530, 17.3800], 
       
       window.innerWidth <= 768 ? 11 : 12);
 
@@ -1362,8 +1362,13 @@ const size = window.innerWidth <= 768
       });
       }
 
-      map.on('zoomend', promijenimjeriloOznake);
-      setTimeout(promijenimjeriloOznake, 0);
+map.on('zoomend', promijenimjeriloOznake);
+
+map.whenReady(function() {
+  requestAnimationFrame(function() {
+    promijenimjeriloOznake();
+  });
+});      
 
       function okvir() {
 	    const isMobile = window.innerWidth < 600;
@@ -1870,6 +1875,20 @@ promijeniZoomMjerilom(e);
 }
 
 var prikaziPanelLokacije = false;
+var geolokacijaObavijestPrikazana = false;
+
+function prikaziGeolokacijaObavijest() {
+
+if (geolokacijaObavijestPrikazana) return;
+
+alert(
+"Vaša lokacija koristit će se isključivo za prikaz položaja na karti i pronalaženje najbližih objekata.\nPodatci o lokaciji ne pohranjuju se na poslužitelj niti dijele s trećim stranama, već ostaju lokalno u Vašem pregledniku tijekom korištenja web-karte."
+);
+
+geolokacijaObavijestPrikazana = true;
+}
+
+var prikaziPanelLokacije = false;
 
 var locateControl = L.control.locate({
 position: 'topleft',
@@ -1916,13 +1935,18 @@ watch: true
 document.querySelector('.leaflet-control-locate')
 ?.classList.add('hideable-control');
 
-/*var locateButton = document.querySelector('.leaflet-control-locate a');
+var locateButton = document.querySelector('.leaflet-control-locate a');
 
 if (locateButton) {
+
 locateButton.addEventListener('click', function() {
+
+prikaziGeolokacijaObavijest();
 prikaziPanelLokacije = true;
+
 });
-}*/
+
+}
 
 var routingControl = null;
 var routingOdabirAktivan = null;
@@ -2327,6 +2351,8 @@ if (fromLocation) {
 fromLocation.onclick = function(e) {
 e.stopPropagation();
 
+prikaziGeolokacijaObavijest();
+
 function lokacijaIzvanRoutingObuhvata() {
 alert("Nalazite se izvan područja Općine Grude.\nOdaberite polazište unutar ili u blizini područja Općine Grude.");
 routingFromJeMojaLokacija = false;
@@ -2567,7 +2593,7 @@ locateButton.style.setProperty('background', '#FFF2CC', 'important');
 
 var userLatLng = e.latlng;
 
-/*if (!graniceObuhvata.contains(userLatLng)) {
+if (!graniceObuhvata.contains(userLatLng)) {
 
 alert("Nalazite se izvan područja Općine Grude.");
 
@@ -2591,7 +2617,7 @@ locationPanel.style.display = 'none';
 }
 
 return;
-}*/
+}
 
 if (prikaziPanelLokacije) {
 
@@ -3837,7 +3863,7 @@ if (e.layer === slojAdresniRegistar) {
 adresniIkoneUkljucene = true;
 
 if (map.getZoom() < 17) {
-alert("Adrese se prikazuju tek pri krupnijem mjerilu prikaza.\nPovećajte prikaz na željeno područje i adrese će se automatski prikazati.");
+alert("Adrese se prikazuju tek pri krupnijem mjerilu.\nPovećajte prikaz na željeno područje i adrese će se automatski prikazati.");
 }
 
 osvjeziPrikazAdresnihIkona();
