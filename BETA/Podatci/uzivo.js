@@ -633,12 +633,12 @@
     'GOMILICE': '(Prispa — Grad)'
     },
   '2': {
-    'PRISPA': '(Krištelica — Boboška)',
-    'GOMILICE': '(Boboška — Krištelica)'
+    'PRISPA': '(Krištelica — Bili Brig)',
+    'GOMILICE': '(Bili Brig — Krištelica)'
     },
   '3': {
     'RUŽIĆI': '(Sovići — Seline)',
-    'GORICA': '(Seline — Sovići)'
+    'GORICA': '(Seline — Sovići)',
     },
   '4': {
     'LEDINAC': '(Blaževići — Dragićina)',
@@ -666,6 +666,27 @@
     }
     };
 
+  const VIA_BY_ROUTEKEY = {
+    '1S_G-S': '(Grad — Boboška)',
+    '1S_O-S': '(Prispa — Boboška)',
+    '2S_PR-S': '(Bili Brig — Boboška)',
+    '2S_G-S': '(Krištelica — Bili Brig)',
+    '3S_GO-S': '(Sovići — Boboška)',
+    '3S_R-S': '(Seline — Boboška)',
+    '4S_D-S': '(Blaževići — Boboška)',
+    '4S_L-S': '(Dragićina — Boboška)',
+    '5S_DB-S': '(Sovići — Boboška)',
+    '5S_L-S': '(Višnjica — Boboška)',
+    '6S_T-S': '(Alagovac — Boboška)',
+    '6S_RU-S': '(Krištelica — Boboška)',
+    '7S_M-S': '(Višnjica — Boboška)',
+    '7S_P-S': '(Seline — Boboška)',
+    '8S_B-S': '(Ružići — Boboška)',
+    '8S_C-S': '(Krištelica — Boboška)',
+    '9S_B-S': '(Poljanice — Boboška)',
+    '9S_PM-S': '(Blaževići — Boboška)',
+    };
+
   function destFromRouteKey(routeKey) {
   if (!routeKey) return '';
   const m = /-([A-Z0-9]+)$/.exec(routeKey);
@@ -680,12 +701,28 @@
   return DEST_LABEL[destCode] || destCode;
   }
 
+  function formatStopEta(sec) {
+
+  sec = Math.max(0, Math.round(sec));
+
+  if (sec < 60) {
+  return `${sec} s.`;
+  }
+
+  const min = Math.floor(sec / 60);
+  const s = sec % 60;
+
+  return `${min} min. ${s} s.`;
+  }
+
   function popupHtml(tr, state) {
   const dest = destFromRouteKey(state.routeKey || '');
   const baseLine = String(tr.linija || '').replace(/S$/, '');
 
   const via =
-  VIA_BY_DEST?.[baseLine]?.[dest] || '';
+  VIA_BY_ROUTEKEY?.[state.routeKey] ||
+  VIA_BY_DEST?.[baseLine]?.[dest] ||
+  '';
 
   const viaText = via
   ? `<div class="beta-popup-via">${via}</div>`
@@ -750,9 +787,15 @@
   }
   }
 
+  const stopEtaText =
+  typeof state.nextStopSeconds === 'number'
+  ? ` (${formatStopEta(state.nextStopSeconds)})`
+  : '';
+
   const line3 =
   (state.mode === 'moving' && state.nextStopName)
-  ? `<div class="beta-popup-row"><span class="beta-popup-icon">🚋</span>: ${state.nextStopName}</div>`    : '';
+  ? `<div class="beta-popup-row"><span class="beta-popup-icon">🚋</span>: ${state.nextStopName}${stopEtaText}</div>`
+  : '';
 
   return [line1, viaText, line2, line3]
   .filter(Boolean)
@@ -1162,17 +1205,21 @@ div.style.display = 'none';
   trForLabel = active;
 
   let frac = 0;
+  let tRel = 0;
+  let stationDists = null;
+  let nStops = 0;
+  let runTime = 1;
 
   if (r && r.total > 0) {
   let tInTrip = t;
   if (active._t1 >= DAY && t < active._t0) tInTrip = t + DAY;
 
-  const tRel = clamp(tInTrip - active._t0, 0, (active._t1 - active._t0));
+  tRel = clamp(tInTrip - active._t0, 0, (active._t1 - active._t0));
 
-  const stationDists = getRouteStationDistances(rk);
-  const nStops = stationDists ? stationDists.length : 0;
+  stationDists = getRouteStationDistances(rk);
+  nStops = stationDists ? stationDists.length : 0;
   const dwellTotal = Math.max(0, (nStops - 2) * DWELL_TIME);
-  const runTime = Math.max(1, (active._t1 - active._t0) - dwellTotal);
+  runTime = Math.max(1, (active._t1 - active._t0) - dwellTotal);
 
   let distNow = (tRel / (active._t1 - active._t0)) * r.total;
 
@@ -1219,12 +1266,22 @@ div.style.display = 'none';
   const distNow = (r && r.total > 0) ? (frac * r.total) : 0;
   const nextStop = (rk && r && r.total > 0) ? getNextStopByDistance(rk, distNow) : null;
 
+  let nextStopSeconds = null;
+
+  if (nextStop && r && r.total > 0) {
+  nextStopSeconds = Math.max(
+  0,
+  ((nextStop.dist - distNow) / r.total) * runTime
+  );
+  }
+
   popupState = {
   mode: 'moving',
   secondsLeft: (active._t1 - t),
   routeKey: rk,
   networkRouteKey: rk,
-  nextStopName: nextStop ? nextStop.name : null
+  nextStopName: nextStop ? nextStop.name : null,
+  nextStopSeconds: nextStopSeconds
   };
 
   } else if (prev && t >= prev._t1 && (!next || t < next._t0)) {
