@@ -942,12 +942,13 @@ z-index: 500 !important;
 
 @media (max-width: 768px) {
 
+
 .leaflet-top.leaflet-left {
-z-index: 500 !important;
+z-index: 100000 !important;
 }
 
-.leaflet-bottom.leaflet-left {
-z-index: 400 !important;
+.leaflet-top.leaflet-right {
+z-index: 100000 !important;
 }
 
 .location-panel,
@@ -961,15 +962,9 @@ filter: brightness(0);
 
 @media (max-width: 768px) {
 
-.leaflet-bottom.leaflet-left {
-left: 0 !important;
-right: auto !important;
-}
-
+.leaflet-bottom.leaflet-left,
 .leaflet-bottom.leaflet-right {
-right: 10px !important;
-bottom: 10px !important;
-z-index: 500;
+z-index: 500 !important;
 }
 
 .location-panel,
