@@ -968,6 +968,24 @@ right: 0 !important;
 
 }
 
+@media (max-width: 768px) {
+
+.leaflet-bottom {
+z-index: 1 !important;
+}
+
+.leaflet-control-scale,
+.leaflet-control-attribution {
+z-index: 1 !important;
+}
+
+.location-panel,
+.routing-panel {
+z-index: 10000 !important;
+}
+
+}
+
 .hide-in-3d {
 visibility: hidden !important;
 pointer-events: none !important;
