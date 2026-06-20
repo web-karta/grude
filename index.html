@@ -3638,40 +3638,52 @@ dialog.style.display = 'none';
       }
       var adresniBufferSloj = L.layerGroup().addTo(map);
 
-      L.geoJSON(adresniregistar, {
-      pointToLayer: function(feature, latlng) {
-      return L.circle(latlng, {
-      radius: 10,
-      stroke: false,
-      fill: true,
-      fillOpacity: 0,
-      interactive: true
-      });
-      },
-      onEachFeature: function(feature, layer) {
-      dodajUPretragu(layer, feature, "Adresa", "Oznake/Adresniregistar.svg");
-      layer.on('click', function(e) {
-      L.DomEvent.stopPropagation(e);
-      ukloniAktivnuAdresu();
-      const latlng = layer.getLatLng();
-      aktivnaAdresa = L.marker(latlng, {
-      icon: Adresniregistar,
-      zIndexOffset: 1000
-      }).addTo(map);
+var adresniRegistarBufferUcitano = false;
 
-      var okvirAdrese = `
-      <div class="popup-title">${feature.properties["Adresa"] || ""}</div>
-      `;
+function ucitajAdresniRegistarBuffer() {
 
-      aktivnaAdresa.bindPopup(okvirAdrese, okvir());
-      aktivnaAdresa.openPopup();
-      aktivnaAdresa.on('popupclose', function() {
-      ukloniAktivnuAdresu();
-      });
-      });
-      }
-      }).addTo(adresniBufferSloj);
-      //adresniBufferSloj.bringToBack();
+if (adresniRegistarBufferUcitano) return;
+adresniRegistarBufferUcitano = true;
+
+L.geoJSON(adresniregistar, {
+pointToLayer: function(feature, latlng) {
+return L.circle(latlng, {
+radius: 10,
+stroke: false,
+fill: true,
+fillOpacity: 0,
+interactive: true
+});
+},
+onEachFeature: function(feature, layer) {
+dodajUPretragu(layer, feature, "Adresa", "Oznake/Adresniregistar.svg");
+
+layer.on('click', function(e) {
+L.DomEvent.stopPropagation(e);
+ukloniAktivnuAdresu();
+
+const latlng = layer.getLatLng();
+
+aktivnaAdresa = L.marker(latlng, {
+icon: Adresniregistar,
+zIndexOffset: 1000
+}).addTo(map);
+
+var okvirAdrese = `
+<div class="popup-title">${feature.properties["Adresa"] || ""}</div>
+`;
+
+aktivnaAdresa.bindPopup(okvirAdrese, okvir());
+aktivnaAdresa.openPopup();
+
+aktivnaAdresa.on('popupclose', function() {
+ukloniAktivnuAdresu();
+});
+});
+}
+}).addTo(adresniBufferSloj);
+
+}
 
 var adresniIkoneUkljucene = false;
 
@@ -3852,6 +3864,12 @@ osvjeziPrikazAdresnihIkona();
 
 map.on('moveend', function() {
 osvjeziPrikazAdresnihIkona();
+});
+
+window.addEventListener('load', function() {
+setTimeout(function() {
+ucitajAdresniRegistarBuffer();
+}, 700);
 });
 
 
