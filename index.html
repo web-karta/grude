@@ -2722,20 +2722,40 @@ if (aktivni) aktivni.classList.remove('active');
 
     }, 0);
 
-    map.on('locationfound', function (e) {
+  map.on('locationfound', function (e) {
 
-      window.lastUserLocation = e.latlng;
+  if (!graniceObuhvata.contains(e.latlng)) {
 
-      if (routingFromJeMojaLokacija && routingTo) {
+    locateControl.stop();
 
-        if (routingPratiKorisnika) {
-          map.panTo(e.latlng, {
-            animate: true,
-            duration: 0.5
-          });
-        }
+    var locationPanel = document.querySelector('.location-panel');
+    if (locationPanel) {
+      locationPanel.style.display = 'none';
+    }
 
+    var locateButton = document.querySelector('.leaflet-control-locate a');
+    if (locateButton) {
+      locateButton.style.setProperty('background', 'white', 'important');
+    }
 
+    alert(
+      "Nalazite se izvan područja Općine Grude.\n" +
+      "Prikaz lokacije dostupan je samo unutar ili u neposrednoj blizini područja Općine Grude."
+    );
+
+    return;
+    }
+
+    window.lastUserLocation = e.latlng;
+
+    if (routingFromJeMojaLokacija && routingTo) {
+
+      if (routingPratiKorisnika) {
+        map.panTo(e.latlng, {
+        animate: true,
+        duration: 0.5
+      });
+    }
 
         var sada = Date.now();
 
