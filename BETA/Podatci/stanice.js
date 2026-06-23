@@ -2,9 +2,9 @@ var stanice = {"type":"FeatureCollection","name":"stanice","crs":{"type":"name",
 {"type":"Feature","properties":{"ID":1,"Stanica":"Srednja škola","Linije":null,"Napomena":null},"geometry":{"type":"Point","coordinates":[17.41648,43.370972]}},
 {"type":"Feature","properties":{"ID":2,"Stanica":"Park hrvatskih velikana","Linije":null,"Napomena":null},"geometry":{"type":"Point","coordinates":[17.413985,43.372334]}},
 {"type":"Feature","properties":{"ID":3,"Stanica":"Dom zdravlja","Linije":null,"Napomena":null},"geometry":{"type":"Point","coordinates":[17.414063,43.371859]}},
-{"type":"Feature","properties":{"ID":4,"Stanica":"Podi","Linije":null,"Napomena":null},"geometry":{"type":"Point","coordinates":[17.417721,43.369946]}},
-{"type":"Feature","properties":{"ID":5,"Stanica":"Boboška-zgrade","Linije":null,"Napomena":null},"geometry":{"type":"Point","coordinates":[17.420621,43.368069]}},
-{"type":"Feature","properties":{"ID":6,"Stanica":"Zadrina","Linije":null,"Napomena":null},"geometry":{"type":"Point","coordinates":[17.4232,43.367013]}},
+{"type":"Feature","properties":{"ID":4,"Stanica":"Podi","Linije":null,"Napomena":null},"geometry":{"type":"Point","coordinates":[17.417747,43.369941]}},
+{"type":"Feature","properties":{"ID":5,"Stanica":"Boboška-zgrade","Linije":null,"Napomena":null},"geometry":{"type":"Point","coordinates":[17.420651,43.368111]}},
+{"type":"Feature","properties":{"ID":6,"Stanica":"Zadrina","Linije":null,"Napomena":null},"geometry":{"type":"Point","coordinates":[17.423249,43.367048]}},
 {"type":"Feature","properties":{"ID":7,"Stanica":"Supernova","Linije":null,"Napomena":null},"geometry":{"type":"Point","coordinates":[17.423722,43.365371]}},
 {"type":"Feature","properties":{"ID":8,"Stanica":"Bili Brig","Linije":null,"Napomena":null},"geometry":{"type":"Point","coordinates":[17.420602,43.363283]}},
 {"type":"Feature","properties":{"ID":9,"Stanica":"Gospodarska zona Bili Brig","Linije":null,"Napomena":null},"geometry":{"type":"Point","coordinates":[17.422323,43.364332]}},
@@ -230,6 +230,7 @@ var stanice = {"type":"FeatureCollection","name":"stanice","crs":{"type":"name",
 {"type":"Feature","properties":{"ID":229,"Stanica":"Alagovac","Linije":null,"Napomena":null},"geometry":{"type":"Point","coordinates":[17.369455,43.380187]}},
 {"type":"Feature","properties":{"ID":230,"Stanica":"Šimići","Linije":null,"Napomena":null},"geometry":{"type":"Point","coordinates":[17.372333,43.379411]}},
 {"type":"Feature","properties":{"ID":231,"Stanica":"Okretište Otok","Linije":null,"Napomena":null},"geometry":{"type":"Point","coordinates":[17.411257,43.368666]}},
-{"type":"Feature","properties":{"ID":232,"Stanica":"Ljiljkuša","Linije":null,"Napomena":null},"geometry":{"type":"Point","coordinates":[17.390893,43.351779]}}
+{"type":"Feature","properties":{"ID":232,"Stanica":"Ljiljkuša","Linije":null,"Napomena":null},"geometry":{"type":"Point","coordinates":[17.390893,43.351779]}},
+{"type":"Feature","properties":{"ID":233,"Stanica":"Gaj","Linije":null,"Napomena":null},"geometry":{"type":"Point","coordinates":[17.440363,43.337245]}}
 ]
 }
