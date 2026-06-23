@@ -1379,6 +1379,50 @@ if (aktivni) aktivni.classList.remove('active');
     </div>
   </div>
 
+  <div id="infoCetvrti" class="info-dialog">
+
+    <div class="info-dialog-close" onclick="
+    document.getElementById('infoCetvrti').style.display='none';
+    var aktivni = document.querySelector('.toggle-btn.active');
+    if (aktivni) aktivni.classList.remove('active');
+    ">×</div>
+
+    <div class="info-dialog-title">Četvrti Gruda</div>
+
+    <div class="info-dialog-text">
+      Naselje Grude je za potrebe ove web-karte i provedbe prostornih analiza podijeljeno na 20 četvrti.<br>
+      Njihovi nazivi zasnivaju se na postojećim lokalnim toponimima, katastarskim nazivima rudina, nazivima brdskih vrhova te tradicionalnim nazivima prostora koji su se očuvali kroz vrijeme.<br>
+      Četvrti Gruda su:<br> 
+      <ul>
+        <li>Grad,</li>
+        <li>Boboška,</li>
+        <li>Bili Brig,</li>
+        <li>Krištelica,</li>
+        <li>Pešija,</li>
+        <li>Gomilice,</li>
+        <li>Bostan,</li>
+        <li>Bezdan,</li>
+        <li>Otok,</li>
+        <li>Zagomila,</li>
+        <li>Prispa,</li>
+        <li>Seline,</li>
+        <li>Topala,</li>
+        <li>Čarapuša,</li>
+        <li>Banovac,</li>
+        <li>Musinac,</li>
+        <li>Kadunjača,</li>
+        <li>Imotica,</li>
+        <li>Podi,</li>
+        <li>Lovreć.</li>
+      </ul>
+      Granice četvrti određene su prema prometnicama, prirodnim preprekama, postojećoj izgrađenosti te drugim prostornim obilježjima koja ih razlikuju od susjednih cjelina.<br> 
+      Većina četvrti odgovara lokalnim nazivima koji su u širokoj upotrebi među stanovništvom. Iznimku predstavljaju četvrti Imotica, Lovreć i Podi. Budući da za navedena područja nisu poznati uvriježeni nazivi četvrti, njihovi su nazivi određeni prema postojećim nazivima katastarskih rudina i zemljopisnih obilježja.<br>
+      Važno je naglasiti da prikazana podjela nije službena administrativna podjela naselja Grude. Četvrti nemaju utvrđene granice niti predstavljaju službene mjesne jedinice, već približan prikaz lokalno prepoznatih prostornih cjelina zasnovan na stvarnim nazivima i prostornim obilježjima prostora.<br>
+      Četvrti Prispa (već se doživljava kao četvrt Gruda) i Seline (zbog stadiona Elić Luka, Bekija) izdvojene su iz naselja Ružići, dok je četvrt Zagomila (funkcionalno i prostorno integrirana s Grudama) izdvojena iz naselja Dragićina. Takav pristup u skladu je s Prostornim planom Općine Grude koji predviđa daljnje širenje naselja Grude prema navedenim područjima.<br>
+      Podjela pridonosi očuvanju lokalnog identiteta, tradicionalnih naziva prostora i prepoznatljivosti pojedinih dijelova naselja te istodobno predstavlja poticaj njihovu budućem prihvaćanju i razvoju kao gradskih četvrti u skladu s daljnjim urbanim razvojem Gruda.    
+    </div>
+  </div>
+
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.min.js"></script>
   <script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
@@ -1407,6 +1451,7 @@ if (aktivni) aktivni.classList.remove('active');
   <script src="Podatci/trgovine.js"></script>
   <script src="Podatci/poduzeca.js"></script>
   <script src="Podatci/adresniregistar.js"></script>
+  <script src="Podatci/cetvrti.js"></script>
   <script src="Podatci/granica.js"></script>
   <script>
 
@@ -1603,7 +1648,8 @@ if (aktivni) aktivni.classList.remove('active');
           'infoGospodarstvo',
           'infoKultura',
           'infoVjerski',
-          'infoZnamenitosti'
+          'infoZnamenitosti',
+          'infoCetvrti'
         ].forEach(function (id) {
           var dialog = document.getElementById(id);
           if (dialog) {
@@ -1909,6 +1955,10 @@ if (aktivni) aktivni.classList.remove('active');
       <div class="menu-item"
       onclick="zatvoriOtvoreno('dialog'); ucitajSlikeDialoga('infoZnamenitosti'); document.getElementById('infoZnamenitosti').style.display='block'">
       Znamenitosti</div>
+
+      <div class="menu-item"
+      onclick="zatvoriOtvoreno('dialog'); document.getElementById('infoCetvrti').style.display='block'">
+      Četvrti Gruda</div>
       `;
 
       gumb.onclick = function (e) {
@@ -3063,7 +3113,7 @@ if (aktivni) aktivni.classList.remove('active');
         prikaziPanelLokacije = false;
       }
 
-      ['infoOpcina', 'infoPovijest', 'infoDanas', 'infoGospodarstvo', 'infoKultura', 'infoVjerski', 'infoZnamenitosti'].forEach(function (id) {
+      ['infoOpcina', 'infoPovijest', 'infoDanas', 'infoGospodarstvo', 'infoKultura', 'infoVjerski', 'infoZnamenitosti', 'infoCetvrti'].forEach(function (id) {
 
         var dialog = document.getElementById(id);
 
@@ -3944,6 +3994,28 @@ if (aktivni) aktivni.classList.remove('active');
       iscrtajVidljiveAdresneIkone();
     }
 
+    var slojCetvrti = L.geoJSON(cetvrti, {
+      style: {
+      color: '#232323',
+      weight: 1,
+      opacity: 1,
+      dashArray: '6,4',
+      lineJoin: 'bevel',
+      fillColor: '#fff9b7',
+      fillOpacity: 0.5
+      },
+    onEachFeature: function (feature, layer) {
+    
+    var naziv = feature.properties["Naziv"] || feature.properties["naziv"] || feature.properties["Četvrt"] || "";
+
+    if (naziv) {
+      layer.bindPopup(`
+        <div class="popup-title">${naziv}</div>
+      `, okvir());
+      }
+    }
+    });
+
     var slojGranicaPodloga = L.geoJSON(granica, {
       style: {
         color: '#ffc6c7',
@@ -4004,6 +4076,7 @@ if (aktivni) aktivni.classList.remove('active');
       '<img src="Oznake/Kafici.svg"> Kafići': slojKafici,
       '<img src="Oznake/Granicniprijelazi.svg"> Granični prijelazi': slojGranicniPrijelazi,
       '<img src="Oznake/Adresniregistar.svg"> Adresni registar': slojAdresniRegistar,
+      '<img src="Oznake/cetvrti.png"> Četvrti Gruda': slojCetvrti,
       '<img src="Oznake/granica.png"> Granica Općine Grude': slojGranica
 
     };
