@@ -121,11 +121,25 @@
       overflow-y: auto;
     }
 
+    #betaInfoPanel h2 {
+      font-family: "PT Serif", serif;
+      font-size: 20px;
+      font-weight: 700;
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 12px;
+    }
+
     @media (max-width: 768px) {
       #betaInfoPanel {
-        top: 0;
-        right: 54px;
-        width: 300px;
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        right: 58px;
+        width: auto;
+        max-width: none;
+        min-width: 0;
+        z-index: 9999;
         max-height: 350px;
         padding: 14px;
         font-size: 12px;
@@ -142,16 +156,6 @@
     #betaInfoPanel.open {
       display: block;
     }
-
-    #betaInfoPanel h2 {
-      font-family: "PT Serif", serif;
-      font-size: 20px;
-      font-weight: 700;
-      text-align: center;
-      margin-top: 0;
-      margin-bottom: 12px;
-    }
-
 
     .leaflet-popup-content,
     .leaflet-popup-content * {
