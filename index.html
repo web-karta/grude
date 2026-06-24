@@ -4139,6 +4139,11 @@ if (aktivni) aktivni.classList.remove('active');
       '<img src="Oznake/cetvrti.png"> Četvrti Gruda': slojCetvrti
     };
 
+    var praviLayersPanel = L.control.layers(podloge, tematskiSlojevi, {
+      collapsed: true,
+      position: 'topright'
+    }).addTo(map);
+
     map.on('overlayadd', function (e) {
       if (e.layer === slojAdresniRegistar) {
         adresniIkoneUkljucene = true;
