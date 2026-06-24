@@ -1452,6 +1452,8 @@ if (aktivni) aktivni.classList.remove('active');
   <script src="Podatci/poduzeca.js"></script>
   <script src="Podatci/adresniregistar.js"></script>
   <script src="Podatci/cetvrti.js"></script>
+  <script src="Podatci/naselja.js"></script>
+  <script src="Podatci/graniceNaselja.js"></script>
   <script src="Podatci/granica.js"></script>
   <script>
 
@@ -3997,12 +3999,12 @@ if (aktivni) aktivni.classList.remove('active');
     var slojCetvrti = L.geoJSON(cetvrti, {
       style: {
       color: '#232323',
-      weight: 1,
+      weight: 0.8,
       opacity: 1,
       dashArray: '6,4',
       lineJoin: 'bevel',
       fillColor: '#fff9b7',
-      fillOpacity: 0.5
+      fillOpacity: 0.4
       },
     onEachFeature: function (feature, layer) {
     
@@ -4015,6 +4017,39 @@ if (aktivni) aktivni.classList.remove('active');
       }
     }
     });
+
+    var slojNaselja = L.geoJSON(naselja, 
+      {
+      style: {
+      color: "#232323",
+      weight: 0.8,
+      fillColor: "#FFF9B7",
+      fillOpacity: 0.6
+      }, onEachFeature: function(feature, layer) {
+      layer.bindPopup(`
+        <div class="popup-title">${feature.properties["Ulica"]}</div>
+        <div class="popup-grid">
+        <div class="lbl">Naselje:</div>
+        <div class="val">${feature.properties["Naselje"]}</div>
+        </div>
+        `, okvir());
+      }
+    });
+
+    var graniceNaseljaSloj = L.geoJSON(graniceNaselja, {
+      style: {
+      color: "#000000",
+      weight: 1.75,
+      opacity: 1,
+      fillOpacity: 0,
+      interactive: false
+      }
+    });
+
+    var naseljaGrupa = L.layerGroup([
+      slojNaselja,
+      graniceNaseljaSloj
+    ]);
 
     var slojGranicaPodloga = L.geoJSON(granica, {
       style: {
@@ -4077,6 +4112,7 @@ if (aktivni) aktivni.classList.remove('active');
       '<img src="Oznake/Granicniprijelazi.svg"> Granični prijelazi': slojGranicniPrijelazi,
       '<img src="Oznake/Adresniregistar.svg"> Adresni registar': slojAdresniRegistar,
       '<img src="Oznake/cetvrti.png"> Četvrti Gruda': slojCetvrti,
+      '<img src="Oznake/naselja.png"> Naselja Općine Grude': naseljaGrupa,
       '<img src="Oznake/granica.png"> Granica Općine Grude': slojGranica
 
     };
