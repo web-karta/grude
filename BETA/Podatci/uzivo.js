@@ -58,8 +58,8 @@
   return SPECIAL_MD.has(md);
   }
 
-  const SATURDAY_DISABLED_VEHICLES = new Set(['21', '33', '42', '52', '62', '72']);
-  const SUNDAY_DISABLED_VEHICLES = new Set(['21', '32', '33', '42', '52', '62', '72']);
+  const SATURDAY_DISABLED_VEHICLES = new Set(['33', '42', '52', '62', '72']);
+  const SUNDAY_DISABLED_VEHICLES = new Set(['32', '33', '42', '52', '62', '72']);
 
   function isSaturday(d = new Date()) {
   return d.getDay() === 6;
@@ -208,7 +208,7 @@
     stationById.set(id, { latlng: [c[1], c[0]], name: String(f.properties?.Stanica ?? '') });
   });
 
-  const TERM_CODE = {'Gomilice': 'G', 'Otok': 'O', 'Prispa': 'PR', 'Gorica': 'GO', 'Ružići': 'R', 'Drinovci': 'D', 'Ledinac': 'L', 'Drinovačko Brdo': 'DB', 'Tihaljina': 'T', 'Rupine': 'RU',
+  const TERM_CODE = {'Gomilice': 'G', 'Otok': 'O', 'Prispa': 'PR', 'Gorica': 'GO', 'Ružići': 'R', 'Drinovci': 'D', 'Ledinac': 'L', 'Jabuka': 'DB', 'Tihaljina': 'T', 'Rupine': 'RU',
   'Puteševica': 'P', 'Medovići': 'M', 'Cere': 'C', 'Borajna': 'B', 'Peć Mlini': 'PM', 'Spremište Boboška': 'S'};
   function pickRouteKeyForTrip(trip) {
   if (trip.red) {
@@ -622,7 +622,7 @@
   });
   }
 
-  const DEST_LABEL = {G: 'GOMILICE', O: 'OTOK', PR: 'PRISPA', GO: 'GORICA', R: 'RUŽIĆI', D: 'DRINOVCI', L: 'LEDINAC', DB: 'DRINOVAČKO BRDO', 
+  const DEST_LABEL = {G: 'GOMILICE', O: 'OTOK', PR: 'PRISPA', GO: 'GORICA', R: 'RUŽIĆI', D: 'DRINOVCI', L: 'LEDINAC', DB: 'JABUKA', 
   T: 'TIHALJINA', RU: 'RUPINE', P: 'PUTEŠEVICA', M: 'MEDOVIĆI', C: 'CERE', B: 'BORAJNA', PM: 'PEĆ MLINI', S: 'SPREMIŠTE BOBOŠKA'};
   
   const DEST_DISPLAY_OVERRIDE = {};
@@ -646,7 +646,7 @@
     },
   '5': {
     'LEDINAC': '(Sovići — Višnjica)',
-    'DRINOVAČKO BRDO': '(Višnjica — Sovići)'
+    'JABUKA': '(Višnjica — Sovići)'
     },
   '6': {
     'RUPINE': '(Drinovci — Alagovac)',
@@ -807,7 +807,7 @@
   function ensureFilterUI() {
   if (document.getElementById('betaFilter')) return;
 
-  const DEST_NAME = {G: 'Gomilice', O: 'Otok', PR: 'Prispa', GO: 'Gorica', R: 'Ružići', D: 'Drinovci', L: 'Ledinac', DB: 'Drinovačko Brdo',
+  const DEST_NAME = {G: 'Gomilice', O: 'Otok', PR: 'Prispa', GO: 'Gorica', R: 'Ružići', D: 'Drinovci', L: 'Ledinac', DB: 'Jabuka',
   T: 'Tihaljina', RU: 'Rupine', P: 'Puteševica', M: 'Medovići', C: 'Cere', B: 'Borajna', PM: 'Peć Mlini', S: 'Spremište Boboška'};
 
   function destCodeFromDir(dirCode) {
