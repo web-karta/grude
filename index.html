@@ -1473,6 +1473,7 @@ if (aktivni) aktivni.classList.remove('active');
   <script src="Podatci/poduzeca.js"></script>
   <script src="Podatci/adresniregistar.js"></script>
   <script src="Podatci/cetvrti.js"></script>
+  <script src="Podatci/naselja.js"></script>
   <script src="Podatci/graniceNaselja.js"></script>
   <script src="Podatci/granica.js"></script>
   <script>
@@ -4021,10 +4022,10 @@ if (aktivni) aktivni.classList.remove('active');
       color: '#232323',
       weight: 0.8,
       opacity: 1,
-      dashArray: '6,4',
+      dashArray: '1,4',
       lineJoin: 'bevel',
       fillColor: '#fff9b7',
-      fillOpacity: 0.4
+      fillOpacity: 0.75
       },
     onEachFeature: function (feature, layer) {
     
@@ -4038,13 +4039,13 @@ if (aktivni) aktivni.classList.remove('active');
     }
     });
 
-    var slojNaselja = L.geoJSON(graniceNaselja, 
+    var slojNaselja = L.geoJSON(naselja, 
       {
       style: {
       color: "#232323",
-      weight: 0.8,
+      weight: 1.5,
       fillColor: "#FFF9B7",
-      fillOpacity: 0.65
+      fillOpacity: 0.5
       }, onEachFeature: function(feature, layer) {
       layer.bindPopup(`
         <div class="popup-title">${feature.properties["Naselje"]}</div>
@@ -4054,20 +4055,23 @@ if (aktivni) aktivni.classList.remove('active');
       }
     });
 
-    //var graniceNaseljaSloj = L.geoJSON(graniceNaselja, {
-      //style: {
-      //color: "#000000",
-      //weight: 1.75,
-      //opacity: 1,
-      //fillOpacity: 0,
-      //interactive: false
-      //}
-    //});
-
-    //var naseljaGrupa = L.layerGroup([
-      //slojNaselja,
-      //graniceNaseljaSloj
-    //]);
+    var slojMjesta = L.geoJSON(graniceNaselja, {
+      style: {
+      color: "#232323",
+      weight: 1,
+      fillColor: "#FFF9B7",
+      fillOpacity: 0.65,
+      dashArray: '6,4',
+      }, onEachFeature: function(feature, layer) {
+      layer.bindPopup(`
+      <div class="popup-title">${feature.properties["Mjesto"]}</div>
+      <div class="popup-grid">
+      <div class="lbl">Naselje:</div>
+      <div class="val">${feature.properties["Naselje"]}</div>
+      </div>
+      `, okvir());
+      }
+    });
 
     var slojGranicaPodloga = L.geoJSON(granica, {
       style: {
@@ -4129,43 +4133,11 @@ if (aktivni) aktivni.classList.remove('active');
       '<img src="Oznake/Kafici.svg"> Kafići': slojKafici,
       '<img src="Oznake/Granicniprijelazi.svg"> Granični prijelazi': slojGranicniPrijelazi,
       '<img src="Oznake/Adresniregistar.svg"> Adresni registar': slojAdresniRegistar,
-      '<img src="Oznake/cetvrti.png"> Četvrti Gruda': slojCetvrti,
+      '<img src="Oznake/granica.png"> Granica Općine Grude': slojGranica,
       '<img src="Oznake/naselja.png"> Naselja Općine Grude': slojNaselja,
-      '<img src="Oznake/granica.png"> Granica Općine Grude': slojGranica
-
+      '<img src="Oznake/graniceNaselja.png"> Mjesta Općine Grude': slojMjesta,
+      '<img src="Oznake/cetvrti.png"> Četvrti Gruda': slojCetvrti
     };
-
-    var slojeviZaMobilnoUbrzanje = [
-      slojCrkve,
-      slojGroblja,
-      slojSkole,
-      slojVrtici,
-      slojSRUstanove,
-      slojVetUstanove,
-      slojLjekarne,
-      slojStomatoloske,
-      slojZdravstvene,
-      slojVatrogasne,
-      slojPosta,
-      slojPolicijaCarina,
-      slojGranicniPrijelazi,
-      slojJavnaUprava,
-      slojKulturneUstanove,
-      slojPrirodneZnamenitosti,
-      slojKulturnoPovijesneZnamenitosti,
-      slojRestorani,
-      slojKafici,
-      slojSmjestaji,
-      slojBenzinskePostaje,
-      slojBanke,
-      slojTrgovine,
-      slojPoduzeca
-    ];
-
-    var praviLayersPanel = L.control.layers(podloge, tematskiSlojevi, {
-      collapsed: true,
-      position: 'topright'
-    }).addTo(map);
 
     map.on('overlayadd', function (e) {
       if (e.layer === slojAdresniRegistar) {
