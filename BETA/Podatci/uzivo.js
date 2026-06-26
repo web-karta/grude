@@ -1,3 +1,17 @@
+/*
+ Dijelovi algoritma simulacije kretanja vozila,
+ izračuna položaja vozila na trasi te periodičkog
+ osvježavanja prikaza inspirirani su projektom
+ "ZET uživo".
+
+ Autor: Ivica Kičić
+ https://github.com/ikicic/zet
+ BSD 3-Clause License
+
+ Kod je značajno prilagođen i proširen za potrebe
+ projekta BETA – Bekijski Autobus.
+*/
+
 (function () {
   'use strict';
   const DATA = window.BETA_DATA || {};
@@ -418,6 +432,11 @@
   });
   }
 
+  // Algoritamski pristup inspiriran projektom "ZET uživo"
+// Autor: Ivica Kičić
+// https://github.com/ikicic/zet
+// BSD 3-Clause License
+
   function buildGraphForRoute(routeKey) {
   const nodes = new Map();
   function ensureNode(latlng) {
@@ -462,6 +481,11 @@
   return bestK;
   }
 
+// Implementacija algoritma najkraćeg puta
+// inspirirana projektom "ZET uživo"
+// Autor: Ivica Kičić
+// BSD 3-Clause License
+
   function dijkstra(nodes, startK, goalK) {
   if (startK === goalK) return [];
   const dist = new Map();
@@ -502,6 +526,11 @@
   edges.reverse();
   return edges;
   }
+
+// Implementacija algoritma najkraćeg puta
+// inspirirana projektom "ZET uživo"
+// Autor: Ivica Kičić
+// BSD 3-Clause License
 
   function buildRoute(key) {
   if (routeCache.has(key)) return routeCache.get(key);
@@ -1064,6 +1093,10 @@ div.style.display = 'none';
   const lastRouteKeyByVehicle = new Map();
   const lastActiveT0ByVehicle = new Map();
   const lastPosByVehicle = new Map();
+
+// inspirirana projektom "ZET uživo"
+// Autor: Ivica Kičić
+// BSD 3-Clause License
 
   function render() {
   const t = nowSec();
