@@ -1516,15 +1516,17 @@ if (aktivni) aktivni.classList.remove('active');
       'onclick="window.open(\'https://leafletjs.com\', \'_blank\')">'
     );
 
-var cartoPodloga = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+var cartoPodloga = L.tileLayer(
+  'https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_4hmn_1_2be252b58326f03c19290509',
+  {
     attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-    subdomains: 'abcd',
     maxZoom: 19,
     minZoom: 10,
     updateWhenIdle: true,
     updateWhenZooming: false,
     keepBuffer: 1
-}).addTo(map);
+  }
+).addTo(map);
 
     var esriPodloga = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       maxZoom: 18,
